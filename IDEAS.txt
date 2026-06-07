@@ -1,0 +1,3 @@
+1. Buttons for Company Research should be created automaticlly which open a google search with prefilled query by the name of the company
+2. An AI which does some research in the fields.
+3. Resume upload and check job compatibility, location comfort, etc etc
