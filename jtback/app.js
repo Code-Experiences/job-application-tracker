@@ -12,17 +12,13 @@ export default async function (fastify, opts) {
   // Place here your custom code!
 
   // Do not touch the following lines
-
-  // This loads all plugins defined in plugins
-  // those should be support plugins that are reused
-  // through your application
+  // This loads all plugins defined in /plugins
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'plugins'),
     options: Object.assign({}, opts)
   })
 
-  // This loads all plugins defined in routes
-  // define your routes in one of these
+  // This loads all routes defined in routes
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'routes'),
     options: Object.assign({}, opts)
