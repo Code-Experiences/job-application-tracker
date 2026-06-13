@@ -19,8 +19,6 @@ model User {
   created_at DateTime @default(now())
 
   applications Application[]
-
-  @@map("user")
 }
 
 model Company {
@@ -40,7 +38,7 @@ model Application {
   company_id       String
   application_date DateTime @default(now())
   status           Status   @default(APPLIED)
-  url              String   @unique
+  url              String
   role             String
 
   user    User    @relation(fields: [user_id], references: [user_id])
