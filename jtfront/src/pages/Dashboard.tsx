@@ -1,6 +1,8 @@
 import "../index.css";
+import { useState } from "react";
 
 function Dashboard() {
+  const [openModal, setOpenModal] = useState(false);
   return (
     <div className="container">
       <div className="header">
@@ -9,7 +11,7 @@ function Dashboard() {
 
       <div className="layout">
         <div className="left-section">
-          <button className="btn">
+          <button className="btn" onClick={() => setOpenModal(true)}>
             New Application
           </button>
           <div className="job-card">
@@ -48,6 +50,46 @@ function Dashboard() {
           </div>
         </div>
       </div>
+
+      {openModal && (
+        <div className="modal-overlay">
+
+          <div className="modal">
+
+            <h2>New Job Application</h2>
+
+            <form className="form">
+
+              <div className="input-group">
+                <label>Company</label>
+                <input type="text" />
+              </div>
+
+              <div className="input-group">
+                <label>URL</label>
+                <input type="text" />
+              </div>
+
+              <div className="input-group">
+                <label>Role</label>
+                <input type="text" />
+              </div>
+
+              <div className="input-group">
+                <label>Salary</label>
+                <input type="text" />
+              </div>
+
+              <button className="submit-btn">
+                Submit
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+      )}
     </div>
   )
 }
