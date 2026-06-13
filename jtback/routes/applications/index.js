@@ -1,12 +1,14 @@
-import { get_application, get_applications_list } from "./applications.js";
+import { get_application, get_user_applications } from "./applications.js";
 
 export default async function (fastify, opts) {
   fastify.get('/', async function (request, reply) {
-    return { list: await get_applications_list(fastify.prisma) }
+    const { uid } = request.query;
+    return { list: await get_user_applications(fastify.prisma, uid) }
   })
 
-  fastify.get('/:id', async function (request, reply) {
-    const { id } = request.params;
-    return { data: await get_application(fastify.prisma, id) }
+  fastify.get('/:appid', async function (request, reply) {
+    const { uid } = request.query;
+    const { appid } = request.params;
+    return { data: await get_application(fastify.prisma, appid, uid) }
   })
 }
