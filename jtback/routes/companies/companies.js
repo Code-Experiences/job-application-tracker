@@ -16,7 +16,7 @@ export async function search_companies(prisma, query) {
   return await prisma.Company.findMany({
     where: {
       name: {
-        startsWith: query
+        contains: query
       }
     },
     select: {
