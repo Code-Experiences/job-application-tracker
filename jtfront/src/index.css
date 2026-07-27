@@ -154,7 +154,7 @@ body {
   margin: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 
@@ -181,6 +181,26 @@ body {
   padding: 40px;
 
   border-radius: 4px;
+
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+
+  border: none;
+  background: transparent;
+
+  font-size: 28px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: #635bff;
 }
 
 .modal h2 {
@@ -260,3 +280,13 @@ body {
   text-align: center;
 }
 
+.job-link {
+  text-decoration: none;
+  color: #635bff;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.job-link:hover {
+  text-decoration: underline;
+}

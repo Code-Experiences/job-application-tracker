@@ -6,19 +6,19 @@ function Dashboard() {
   const [openModal, setOpenModal] = useState(false);
   const [jobList, setJobList] = useState<any[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<any | null>(null);
-  const [selectedJob, setSelectedJob] =useState<any | null>(null);
-  const [openProfile, setOpenProfile] =useState(false);
+  const [selectedJob, setSelectedJob] = useState<any | null>(null);
+  const [openProfile, setOpenProfile] = useState(false);
 
-   const id= localStorage.getItem('id');
+  const id = localStorage.getItem('id');
 
   useEffect(() => {
-   
+
     const fetchData = async () => {
       if (!id) {
-      console.log("No ID found in localStorage");
-      navigate('/login');
-      return;
-    }
+        console.log("No ID found in localStorage");
+        navigate('/login');
+        return;
+      }
       try {
         const response = await fetch(`http://127.0.0.1:3000/applications/${id}`);
         const data = await response.json();
@@ -57,20 +57,20 @@ function Dashboard() {
 
   }, [selectedJobId]);
 
-  useEffect(()=>{console.log(selectedJobId)},[selectedJobId])
+  useEffect(() => { console.log(selectedJobId) }, [selectedJobId])
 
   const navigate = useNavigate();
-   const handleRedirect = () => {
-      localStorage.clear();
-        navigate('/login'); 
-    };
+  const handleRedirect = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
 
   return (
     <div className="container">
       <div className="header">
         <h1>Job Tracker Application</h1>
         <div className="profile-section">
-          <div className="profile" onClick={()=>setOpenProfile(!openProfile)}>
+          <div className="profile" onClick={() => setOpenProfile(!openProfile)}>
             R
           </div>
           {openProfile && (
@@ -99,7 +99,7 @@ function Dashboard() {
 
         <div className="right-section">
           <div className="company-header">
-            {selectedJob ? selectedJob.role : "Company Name"}
+            {selectedJob ? `${selectedJob.role} - ${selectedJob.company.name}` : "Company Name"}
           </div>
           <div className="content">
             <div className="box">
@@ -107,7 +107,7 @@ function Dashboard() {
 
               {selectedJob ? (
                 <>
-
+                  {console.log(selectedJob)}
                   <p>
                     <strong>Application ID:</strong>
                     {" "}
@@ -169,7 +169,18 @@ function Dashboard() {
             </div>
           </div>
           <div className="bottom-box">
-            Links Section
+            {selectedJob ? (
+              <a
+                href={selectedJob.url}
+                target="_blank"
+                rel="noreferrer"
+                className="job-link"
+              >
+                🌐
+              </a>
+            ) : (
+              <p>Links Section</p>
+            )}
           </div>
         </div>
       </div>
@@ -178,6 +189,14 @@ function Dashboard() {
         <div className="modal-overlay">
 
           <div className="modal">
+
+            <button
+              className="modal-close"
+              onClick={() => setOpenModal(false)}
+              type="button"
+            >
+              ×
+            </button>
 
             <h2>New Job Application</h2>
 
