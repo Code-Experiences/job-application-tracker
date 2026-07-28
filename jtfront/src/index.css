@@ -244,6 +244,11 @@ body {
   cursor: pointer;
 }
 
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .layoutRegister {
   min-height: calc(100vh - 120px);
   border: 2px solid #555;
