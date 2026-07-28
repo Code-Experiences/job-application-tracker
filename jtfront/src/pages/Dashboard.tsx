@@ -6,19 +6,23 @@ function Dashboard() {
   const [openModal, setOpenModal] = useState(false);
   const [jobList, setJobList] = useState<any[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<any | null>(null);
-  const [selectedJob, setSelectedJob] =useState<any | null>(null);
-  const [openProfile, setOpenProfile] =useState(false);
+  const [selectedJob, setSelectedJob] = useState<any | null>(null);
+  const [openProfile, setOpenProfile] = useState(false);
+  const [companyDetails, setCompanyDetails] = useState<any | null>(null);
+  const [company, setCompany] = useState("");
+  const [url, setUrl] = useState("");
+  const [role, setRole] = useState("");
 
-   const id= localStorage.getItem('id');
+  const id = localStorage.getItem('id');
 
   useEffect(() => {
-   
+
     const fetchData = async () => {
       if (!id) {
-      console.log("No ID found in localStorage");
-      navigate('/login');
-      return;
-    }
+        console.log("No ID found in localStorage");
+        navigate('/login');
+        return;
+      }
       try {
         const response = await fetch(`http://127.0.0.1:3000/applications/${id}`);
         const data = await response.json();
@@ -57,20 +61,42 @@ function Dashboard() {
 
   }, [selectedJobId]);
 
-  useEffect(()=>{console.log(selectedJobId)},[selectedJobId])
+  useEffect(() => {
+    if (!selectedJob?.company_id) return;
+
+    const fetchCompanyDetails = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:3000/companies/${selectedJob.company_id}`
+        );
+
+        const data = await response.json();
+
+        setCompanyDetails(data.data);
+
+      } catch (error) {
+        console.log("Error fetching company:", error);
+      }
+    };
+
+    fetchCompanyDetails();
+
+  }, [selectedJob]);
+
+  useEffect(() => { console.log(selectedJobId) }, [selectedJobId])
 
   const navigate = useNavigate();
-   const handleRedirect = () => {
-      localStorage.clear();
-        navigate('/login'); 
-    };
+  const handleRedirect = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
 
   return (
     <div className="container">
       <div className="header">
         <h1>Job Tracker Application</h1>
         <div className="profile-section">
-          <div className="profile" onClick={()=>setOpenProfile(!openProfile)}>
+          <div className="profile" onClick={() => setOpenProfile(!openProfile)}>
             R
           </div>
           {openProfile && (
@@ -99,7 +125,7 @@ function Dashboard() {
 
         <div className="right-section">
           <div className="company-header">
-            {selectedJob ? selectedJob.role : "Company Name"}
+            {selectedJob ? `${selectedJob.role} - ${selectedJob.company.name}` : "Company Name"}
           </div>
           <div className="content">
             <div className="box">
@@ -107,23 +133,11 @@ function Dashboard() {
 
               {selectedJob ? (
                 <>
-
+                  {console.log(selectedJob)}
                   <p>
                     <strong>Application ID:</strong>
                     {" "}
                     {selectedJob.application_id}
-                  </p>
-
-                  <p>
-                    <strong>User ID:</strong>
-                    {" "}
-                    {selectedJob.user_id}
-                  </p>
-
-                  <p>
-                    <strong>Company ID:</strong>
-                    {" "}
-                    {selectedJob.company_id}
                   </p>
 
                   <p>
@@ -146,18 +160,6 @@ function Dashboard() {
                     ).toLocaleDateString()}
                   </p>
 
-                  <p>
-                    <strong>URL:</strong>
-                  </p>
-
-                  <a
-                    href={selectedJob.url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {selectedJob.url}
-                  </a>
-
                 </>
               ) : (
                 <p>Select a job</p>
@@ -165,11 +167,36 @@ function Dashboard() {
             </div>
 
             <div className="box">
-              About Company
+              <h3>About Company</h3>
+
+              {companyDetails ? (
+                <>
+                  <p>
+                    <strong>{companyDetails.name}</strong>
+                  </p>
+
+                  <p>
+                    {companyDetails.description || "No description available"}
+                  </p>
+                </>
+              ) : (
+                <p>Select a job</p>
+              )}
             </div>
           </div>
           <div className="bottom-box">
-            Links Section
+            {selectedJob ? (
+              <a
+                href={selectedJob.url}
+                target="_blank"
+                rel="noreferrer"
+                className="job-link"
+              >
+                🌐
+              </a>
+            ) : (
+              <p>Links Section</p>
+            )}
           </div>
         </div>
       </div>
@@ -179,23 +206,31 @@ function Dashboard() {
 
           <div className="modal">
 
+            <button
+              className="modal-close"
+              onClick={() => setOpenModal(false)}
+              type="button"
+            >
+              ×
+            </button>
+
             <h2>New Job Application</h2>
 
             <form className="form">
 
               <div className="input-group">
                 <label>Company</label>
-                <input type="text" />
+                <input type="text" value={company} onChange={(e)=>setCompany(e.target.value)}/>
               </div>
 
               <div className="input-group">
                 <label>URL</label>
-                <input type="text" />
+                <input type="text" value={url} onChange={(e)=>setUrl(e.target.value)} />
               </div>
 
               <div className="input-group">
                 <label>Role</label>
-                <input type="text" />
+                <input type="text" value={role} onChange={(e)=>setRole(e.target.value)} />
               </div>
 
               <div className="input-group">
@@ -203,7 +238,7 @@ function Dashboard() {
                 <input type="text" />
               </div>
 
-              <button className="submit-btn">
+              <button className="submit-btn" disabled={!company || !url || !role}>
                 Submit
               </button>
 
