@@ -49,7 +49,7 @@ export default function Login() {
 
             <div className="input-group">
               <label>Email</label>
-              <input type="text" name="email" placeholder='Enter your email' value={loginInfo.email} onChange={handleChange}/>
+              <input type="email" name="email" placeholder='Enter your email' value={loginInfo.email} onChange={handleChange}/>
             </div>
 
             <div className="input-group">

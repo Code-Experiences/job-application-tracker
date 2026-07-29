@@ -17,17 +17,17 @@ export default function Register(){
 
               <div className="input-group">
                 <label>Email</label>
-                <input type="text" />
+                <input type="email" />
               </div>
 
               <div className="input-group">
                 <label>Password</label>
-                <input type="text" />
+                <input type="password" />
               </div>
 
               <div className="input-group">
                 <label>Re-enter Password</label>
-                <input type="text" />
+                <input type="password" />
               </div>
 
               <button className="submit-btn">
