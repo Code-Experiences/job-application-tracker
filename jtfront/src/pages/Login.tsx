@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import "../index.css";
 export default function Login() {
   const [loginInfo, setLoginInfo]=useState({
@@ -62,7 +62,7 @@ export default function Login() {
               Login
             </button>
 
-            <p className='tag'>Not a user? Register</p>
+            <p className='tag'>Not a user?<Link to='/register'> Register</Link></p>
 
           </form>
         </div>
