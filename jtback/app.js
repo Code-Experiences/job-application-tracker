@@ -1,0 +1,28 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import AutoLoad from '@fastify/autoload'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// Pass --options via CLI arguments in command to enable these options.
+const options = {}
+
+export default async function (fastify, opts) {
+  // Place here your custom code!
+
+  // Do not touch the following lines
+  // This loads all plugins defined in /plugins
+  fastify.register(AutoLoad, {
+    dir: path.join(__dirname, 'plugins'),
+    options: Object.assign({}, opts)
+  })
+
+  // This loads all routes defined in routes
+  fastify.register(AutoLoad, {
+    dir: path.join(__dirname, 'routes'),
+    options: Object.assign({}, opts)
+  })
+}
+
+export { options }
