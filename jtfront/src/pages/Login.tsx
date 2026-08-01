@@ -1,38 +1,45 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import "../index.css";
 export default function Login() {
-  const [loginInfo, setLoginInfo]=useState({
-    email:'',
-    password:'',
+  const [loginInfo, setLoginInfo] = useState({
+    email: '',
+    password: '',
   })
 
-  const handleChange=(e: React.ChangeEvent<HTMLInputElement>)=>{
-    setLoginInfo({...loginInfo, [e.target.name]:e.target.value});
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   }
 
   const navigate = useNavigate();
-  const handleSubmit=async(e:React.FormEvent<HTMLFormElement>)=>{
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try{
-      const response= await axios.post('http://127.0.0.1:3000/auth/login',loginInfo);
+    try {
+      const response = await axios.post('http://127.0.0.1:3000/auth/login', loginInfo);
       console.log('Form data submitted successfully:', response.data);
-      if(response.data){
+      if (response.data) {
         localStorage.setItem("id", response.data.user_id);
         navigate("/")
       }
     }
-    catch(error){
+    catch (error) {
       console.error('Error submitting form data:', error);
     }
 
   };
 
-  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
- // const navigate= useNavigate();
+  const isEmailValid = emailRegex.test(loginInfo.email);
+
+  const isFormValid =
+    loginInfo.email.trim() !== "" &&
+    loginInfo.password.trim() !== "" &&
+    isEmailValid;
+
+  // const navigate= useNavigate();
   // const handleRedirect=() =>{
   //   navigate('/');
   // }
@@ -49,7 +56,10 @@ export default function Login() {
 
             <div className="input-group">
               <label>Email</label>
-              <input type="email" name="email" placeholder='Enter your email' value={loginInfo.email} onChange={handleChange}/>
+              <input type="email" name="email" placeholder='Enter your email' value={loginInfo.email} onChange={handleChange} />
+              {loginInfo.email && !isEmailValid && (
+                <p className="error">Please enter a valid email address.</p>
+              )}
             </div>
 
             <div className="input-group">
@@ -58,7 +68,7 @@ export default function Login() {
             </div>
 
 
-            <button className="submit-btn" type="submit" > 
+            <button className="submit-btn" type="submit" disabled={!isFormValid} >
               Login
             </button>
 
